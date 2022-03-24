@@ -1,0 +1,98 @@
+body {
+    font-family: 'Fredoka', sans-serif;
+    background: #f4f4f4;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 20px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 25px grey; 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #67c0ff; 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #67c0ffd2; 
+  }
+
+#chatinputdiv {
+    display: flex;
+    flex-direction: row;
+}
+
+#wlist {
+    display: flex;
+    flex-direction: row;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    margin-left: 5vw;
+    color: grey;
+    height: 5vw;
+}
+.mymessage {
+    float: right;
+    background-color: #67c0ff;
+    font-size: xx-large;
+    margin: 5px;
+    padding: 2px;
+    word-wrap: break-word; 
+    border-radius: 10px 0px 10px 10px;
+    display: inline;
+    white-space: initial;
+    word-break: break-all;
+    text-overflow: ellipsis;
+}
+
+.othermessage {
+    float: left;
+    background-color: #b180da;
+    font-size: xx-large;
+    margin: 5px;
+    padding: 2px;
+    word-wrap: break-word; 
+    border-radius: 0px 10px 10px 10px;
+    display: inline;
+    white-space: initial;
+    word-break: break-all;
+    text-overflow: ellipsis;
+}
+
+.botmessage {
+    float: left;
+    background-color: #38dda1;
+    font-size: xx-large;
+    margin: 5px;
+    padding: 2px;
+    word-wrap: break-word; 
+    border-radius: 0px 10px 10px 10px;
+    display: inline;
+    white-space: initial;
+    word-break: break-all;
+    text-overflow: ellipsis;
+}
+
+.chatcontainer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    
+}
+
+#scrollmenu {
+    overflow: auto;
+    white-space: nowrap;
+    width: 90%; 
+    height: 85vh;
+    margin-left: 5%;
+}

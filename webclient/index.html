@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/w3.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
+    <title>WebSocket Web Client</title>
+</head>
+
+<body onkeyup="count_length()">
+    <div id="scrollmenu"></div>
+    <div class="chatcontainer">
+        <div id="chatinputdiv">
+            <input type="text" id="messageBox" placeholder="Type your message here" required maxlength="250"
+                style="display: block; width: 90%; margin-bottom: 10px; margin-left: 5%; padding: 10px;" />
+            <button id="send" title="Send Message!" style="font-size: 1vw; width: 10%; margin-right: 5%; height: 30px; height: 47px;">
+                Send [0/250]
+            </button>
+        </div>
+    </div>
+    <script>
+        function count_length() {
+            const element = document.getElementById('messageBox');
+            var L = element.value.length;
+            document.getElementById('send').innerHTML = 'Send [' + L + '/250]';
+        };
+    </script>
+    <script>
+        const input = document.getElementById("messageBox");
+
+        function make_id(length) {
+            var randomChars = '0123456789';
+            var result = '';
+            for (var i = 0; i < length; i++) {
+                result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+            }
+            return result;
+        }
+
+        const client_id = 'user' + make_id(5);
+
+        if ("WebSocket" in window) {
+            const sendBtn = document.querySelector('#send');
+            const messages = document.querySelector('#scrollmenu');
+            const messageBox = document.querySelector('#messageBox');
+
+            function showMessage(message) {
+                messages.innerHTML += message;
+                messages.scrollTop = messages.scrollHeight;
+                messageBox.value = '';
+            }
+
+            let ws = new WebSocket("ws://localhost:8082");
+
+            ws.onopen = function () {
+                console.log("Connected to Server");
+            };
+
+            sendBtn.onclick = function () {
+                var len = input.value.length;
+                sendmsg()
+            }
+
+            input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    var len = input.value.length;
+                    sendmsg()
+                }
+            });
+
+            function sendmsg() {
+                var len = input.value.length;
+                if (ws) {
+                    if (len > 0) {
+                        ws.send(`${client_id} ${messageBox.value}`);
+                        str = `${messageBox.value}`;
+                        showMessage(`<div class="mymessage">` + `ME ${client_id}: ${messageBox.value}` + `</div> <br><br><br>`);
+                    }
+                } else {
+                    alert("ERROR: Not connected... refresh to try again!");
+                }
+            };
+
+            ws.onmessage = function ({ data }) {
+                console.log(data);
+                if (data.match("user")) {
+                    x = data;
+                    x = x.substring(0, 9) + ":" + x.substring(9, x.length);
+                    showMessage(`<div class="othermessage">` + `${x}` + `</div> <br><br><br>`);
+                } else {
+                    showMessage(`<div class="botmessage">GLU BOT: ` + `${data}` + `</div> <br><br><br>`);
+                    console.log('bot message')
+                }
+
+            };
+
+            ws.onclose = function () {
+                ws = null;
+                alert("Connection closed... refresh to try again!");
+            };
+
+        } else {
+            alert("WebSocket NOT supported by your Browser!");
+        }
+
+    </script>
+</body>
+
+</html>
